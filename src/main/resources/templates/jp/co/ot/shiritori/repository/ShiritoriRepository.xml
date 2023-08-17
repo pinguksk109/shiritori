@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- @formatter:off -->
+<mapper namespace="jp.co.ot.shiritori.repository.ShiritoriRepository">
+
+	<insert id="entry">
+		INSERT INTO 
+			training.shiritori_entry (entry)
+		VALUES
+			(#{param.entryId});
+	</insert>
+
+</mapper>
