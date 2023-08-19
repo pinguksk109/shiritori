@@ -1,11 +1,11 @@
-package jp.co.ot.shiritori.service.request;
+package jp.co.ot.shiritori.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
 
 @Value
 @AllArgsConstructor
-public class ShiritoriEntryParam {
+public class ShiritoriEntryResponse {
 
 	private String entryId;
 	

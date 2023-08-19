@@ -2,17 +2,21 @@ package jp.co.ot.shiritori.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import jp.co.ot.shiritori.service.request.ShiritoriEntryParam;
+import jp.co.ot.shiritori.domain.request.ShiritoriEntryRequest;
+import jp.co.ot.shiritori.repository.ShiritoriRepository;
+import jp.co.ot.shiritori.response.ShiritoriEntryResponse;
+
 
 public class ShiritoriService {
 
 	@Autowired
 	ShiritoriRepository shiritoriRepository;
 	
-	public void entry(ShiritoriEntryParam param) {
+	public ShiritoriEntryResponse entry(ShiritoriEntryRequest request) {
 		
-		shiritoriRepository.entry(param);
+		shiritoriRepository.entry(request);
+		
+		return new ShiritoriEntryResponse(request.getEntryId());
 		
 	}
-
 }
