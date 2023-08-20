@@ -10,6 +10,6 @@ import jp.co.ot.shiritori.domain.request.ShiritoriEntryRequest;
 @Mapper
 public interface ShiritoriRepository {
 
-	void entry(@Param("param")ShiritoriEntryRequest request);
+	void entry(@Param("request")ShiritoriEntryRequest request);
 
 }

@@ -9,7 +9,7 @@
 		INSERT INTO 
 			training.shiritori_entry (entry)
 		VALUES
-			(#{request.entryId});
+			(#{entryId});
 	</insert>
 
 </mapper>
