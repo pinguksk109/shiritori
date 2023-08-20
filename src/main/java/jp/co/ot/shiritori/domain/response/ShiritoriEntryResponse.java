@@ -1,4 +1,4 @@
-package jp.co.ot.shiritori.response;
+package jp.co.ot.shiritori.domain.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;

@@ -11,5 +11,21 @@
 		VALUES
 			(#{entryId});
 	</insert>
+	
+	<select id="judge" resultType="jp.co.ot.shiritori.domain.response.ShiritoriResultResponse">
+		SELECT
+			#{word}
+		FROM
+			training.shiritori
+		WHERE
+			entry = #{entryId};
+	</select>
+	
+	<insert id="saveWord">
+		INSERT INTO
+			training.shiritori (entry, word)
+		VALUES
+			(#{entryId}, #{word});
+	</insert>
 
 </mapper>

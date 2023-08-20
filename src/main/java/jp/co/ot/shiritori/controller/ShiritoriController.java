@@ -1,17 +1,23 @@
 package jp.co.ot.shiritori.controller;
 
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jp.co.ot.shiritori.domain.exception.BadRequestException;
 import jp.co.ot.shiritori.domain.request.ShiritoriEntryRequest;
-import jp.co.ot.shiritori.response.ShiritoriEntryResponse;
+import jp.co.ot.shiritori.domain.request.ShiritoriWordRequest;
+import jp.co.ot.shiritori.domain.response.ShiritoriResultResponse;
 import jp.co.ot.shiritori.service.ShiritoriService;
 
 @RestController
@@ -28,16 +34,25 @@ public class ShiritoriController {
 			throw new BadRequestException("entryIdに不正がありました");
 		}
 		
-		ShiritoriEntryResponse response = shiritoriService.entry(request);
-		
-		return ResponseEntity.ok().body(response);
+		return ResponseEntity.ok().body(shiritoriService.entry(request));
 		
 	}
 	
-//	@PostMapping("/post/entryId/{entryId}")
-//	public ResponseEntity<?> judgeShiritori() {
-//		
-//	}
+	@PostMapping("judge/entryId/{entryId}")
+	public ResponseEntity<?> judge(@PathVariable("entryId") @NotBlank String entryId, @RequestBody @Valid ShiritoriWordRequest request, BindingResult bindingResult) {
+	
+		if(bindingResult.hasErrors()) {
+			throw new BadRequestException("ワードに不正がありました");
+		}
+		
+		ShiritoriResultResponse response = shiritoriService.judge(entryId, request);
+		
+		if(!Objects.isNull(response)) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("入力された単語は既にありました");
+		}
+		
+		return ResponseEntity.ok().build();
+	}
 	
 
 }
