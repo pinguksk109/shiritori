@@ -14,11 +14,13 @@
 	
 	<select id="judge" resultType="jp.co.ot.shiritori.domain.response.ShiritoriResultResponse">
 		SELECT
-			#{request.word}
+			word
 		FROM
 			training.shiritori
 		WHERE
-			entry = #{entryId};
+			entry = #{entryId}
+		AND
+			word = #{request.word};
 	</select>
 	
 	<insert id="saveWord">
