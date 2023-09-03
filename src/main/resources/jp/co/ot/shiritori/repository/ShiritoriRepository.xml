@@ -14,7 +14,7 @@
 	
 	<select id="judge" resultType="jp.co.ot.shiritori.domain.response.ShiritoriResultResponse">
 		SELECT
-			#{word}
+			#{request.word}
 		FROM
 			training.shiritori
 		WHERE
@@ -25,7 +25,7 @@
 		INSERT INTO
 			training.shiritori (entry, word)
 		VALUES
-			(#{entryId}, #{word});
+			(#{entryId}, #{request.word});
 	</insert>
 
 </mapper>
