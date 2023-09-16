@@ -12,6 +12,15 @@
 			(#{entryId});
 	</insert>
 	
+		<select id="getEntryId" resultType="jp.co.ot.shiritori.domain.response.EntryIdResponse">
+		SELECT
+			entry
+		FROM
+			training.shiritori_entry
+		WHERE
+			entry = #{entryId};
+	</select>
+	
 	<select id="judge" resultType="jp.co.ot.shiritori.domain.response.ShiritoriResultResponse">
 		SELECT
 			word

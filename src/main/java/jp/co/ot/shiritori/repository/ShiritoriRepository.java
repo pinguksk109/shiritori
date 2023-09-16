@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import jp.co.ot.shiritori.domain.request.ShiritoriEntryRequest;
 import jp.co.ot.shiritori.domain.request.ShiritoriWordRequest;
+import jp.co.ot.shiritori.domain.response.EntryIdResponse;
 import jp.co.ot.shiritori.domain.response.ShiritoriResultResponse;
 
 @Repository
@@ -26,6 +27,18 @@ public interface ShiritoriRepository {
 	 */
 	ShiritoriResultResponse judge(@Param("entryId") String entryId, @Param("request") ShiritoriWordRequest request);
 
+	/**
+	 * しりとりのキーワードを保存します
+	 * @param entryId
+	 * @param request
+	 */
 	void saveWord(@Param("entryId") String entryId, @Param("request") ShiritoriWordRequest request);
+
+	/**
+	 * エントリーIdを保存します
+	 * @param entryId
+	 * @return
+	 */
+	EntryIdResponse getEntryId(String entryId);
 
 }

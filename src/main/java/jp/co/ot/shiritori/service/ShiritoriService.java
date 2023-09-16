@@ -5,8 +5,10 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jp.co.ot.shiritori.domain.exception.BadRequestException;
 import jp.co.ot.shiritori.domain.request.ShiritoriEntryRequest;
 import jp.co.ot.shiritori.domain.request.ShiritoriWordRequest;
+import jp.co.ot.shiritori.domain.response.EntryIdResponse;
 import jp.co.ot.shiritori.domain.response.ShiritoriEntryResponse;
 import jp.co.ot.shiritori.domain.response.ShiritoriResultResponse;
 import jp.co.ot.shiritori.repository.ShiritoriRepository;
@@ -25,6 +27,12 @@ public class ShiritoriService {
 	public ShiritoriEntryResponse entry(ShiritoriEntryRequest request) {
 		
 		// TODO: 既に出ているentryIdかもしれないからここで調べて分岐したい
+		// 存在しないentryIdだったら処理を進めない
+		EntryIdResponse entryIdResponse = shiritoriRepository.getEntryId(request.getEntryId());
+		
+		if(!Objects.isNull(entryIdResponse)) {
+			throw new BadRequestException(request.getEntryId());
+		}
 		
 		shiritoriRepository.entry(request);
 		
@@ -41,7 +49,12 @@ public class ShiritoriService {
 	 */
 	public ShiritoriResultResponse judge(String entryId, ShiritoriWordRequest request) {
 		
-		// TODO: entryIdがなかったらどうする？
+		// 存在しないentryIdだったら処理を進めない
+		EntryIdResponse entryIdResponse = shiritoriRepository.getEntryId(entryId);
+		
+		if(Objects.isNull(entryIdResponse)) {
+			throw new BadRequestException(entryId);
+		}
 		
 		ShiritoriResultResponse response = shiritoriRepository.judge(entryId, request);
 		
