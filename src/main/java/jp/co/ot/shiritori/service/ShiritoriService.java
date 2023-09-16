@@ -45,8 +45,8 @@ public class ShiritoriService {
 		
 		ShiritoriResultResponse response = shiritoriRepository.judge(entryId, request);
 		
-		// 既にしりとりで出ているワードだったら、null状態のレスポンスを返却する
-		if(Objects.isNull(response.getWord())) {
+		// 既にしりとりで出ているワードだったら、該当単語のレスポンスを返却する
+		if(!Objects.isNull(response)) {
 			return response;
 		}
 		
