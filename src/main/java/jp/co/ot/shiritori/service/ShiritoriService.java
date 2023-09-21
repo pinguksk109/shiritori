@@ -27,7 +27,7 @@ public class ShiritoriService {
 	public ShiritoriEntryResponse entry(ShiritoriEntryRequest request) {
 		
 		// TODO: 既に出ているentryIdかもしれないからここで調べて分岐したい
-		// 存在しないentryIdだったら処理を進めない
+		// 存在するentryIdだったら処理を進めない
 		EntryIdResponse entryIdResponse = shiritoriRepository.getEntryId(request.getEntryId());
 		
 		if(!Objects.isNull(entryIdResponse)) {

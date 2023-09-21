@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>しりとり</title>
+</head>
+<body>
+    <h1>しりとり</h1>
+    
+    <!-- エントリー用フォーム -->
+    <form action="/v1/shiritori/entry/web" method="post">
+        <label for="entryId">Entry ID:</label>
+        <input type="text" id="entryId" name="entryId" th:field="${shiritoriEntryRequest.entryId}" required><br><br>
+        <button type="submit">エントリー</button>
+    </form>
+    
+    <!-- しりとりキーワード入力フォーム -->
+    <form action="#" method="post">
+        <label for="word">しりとりの単語:</label>
+        <input type="text" id="word" name="word" th:field="${shiritoriWordRequest.word}" required><br><br>
+        <button type="submit">しりとりする</button>
+    </form>
+   
+</body>
+</html>
