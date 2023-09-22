@@ -26,7 +26,6 @@ public class ShiritoriService {
 	 */
 	public ShiritoriEntryResponse entry(ShiritoriEntryRequest request) {
 		
-		// TODO: 既に出ているentryIdかもしれないからここで調べて分岐したい
 		// 存在するentryIdだったら処理を進めない
 		EntryIdResponse entryIdResponse = shiritoriRepository.getEntryId(request.getEntryId());
 		
@@ -36,8 +35,7 @@ public class ShiritoriService {
 		
 		shiritoriRepository.entry(request);
 		
-		return new ShiritoriEntryResponse(request.getEntryId());
-		
+		return new ShiritoriEntryResponse(request.getEntryId());	
 	}
 
 	/**
