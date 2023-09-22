@@ -1,8 +1,8 @@
 package jp.co.ot.shiritori.domain.response;
 
-import lombok.Value;
+import lombok.Data;
 
-@Value
+@Data
 public class EntryIdResponse {
 
 	private String entryId;
