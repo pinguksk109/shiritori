@@ -104,6 +104,18 @@ class ShiritoriControllerTest extends ShiritoriController {
 	}
 	
 	@Test
+	void POST_judge_キーワードに半角スペースが含まれる場合_HTTPステータス400を返すこと() throws Exception {
+		String requestBody = "{\"word\": \"りん ご\"}";
+		
+        mvc.perform(MockMvcRequestBuilders.post("/v1/shiritori/judge/entryId/hogehoge")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andReturn();
+	}
+	
+	@Test
 	void POST_judge_キーワードがNullの場合_HTTPステータス400を返すこと() throws Exception {
 		String requestBody = "";
 		
