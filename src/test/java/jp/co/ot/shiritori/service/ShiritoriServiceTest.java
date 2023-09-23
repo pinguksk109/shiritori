@@ -80,6 +80,7 @@ class ShiritoriServiceTest extends ShiritoriService {
 		response.setEntryId("hogehoge");
 		
 		doReturn(response).when(shiritoriRepository).getEntryId(anyString());
+		doReturn(null).when(shiritoriRepository).judge(anyString(), any());
 		doNothing().when(shiritoriRepository).saveWord(anyString(), any());
 		
 		ShiritoriResultResponse actual = sut.judge("hogehoge",request);
@@ -96,10 +97,44 @@ class ShiritoriServiceTest extends ShiritoriService {
 		EntryIdResponse response = null;
 		
 		doReturn(response).when(shiritoriRepository).getEntryId(anyString());
-		doNothing().when(shiritoriRepository).saveWord(anyString(), any());
 		
 		assertThrows(BadRequestException.class, () -> {
 			sut.judge("hogehoge",request);
+		});
+		
+	}
+	
+	@Test
+	void judge_既にしりとりで出ているキーワードの場合_そのキーワードを返すこと() {
+		
+		ShiritoriWordRequest request = new ShiritoriWordRequest();
+		request.setWord("りんご");
+		
+		EntryIdResponse idResponse = new EntryIdResponse();
+		idResponse.setEntryId("hogehoge");
+		
+		ShiritoriResultResponse shiritoriResponse = new ShiritoriResultResponse("りんご");
+		
+		doReturn(idResponse).when(shiritoriRepository).getEntryId(anyString());
+		doReturn(shiritoriResponse).when(shiritoriRepository).judge(anyString(), any());
+		
+		ShiritoriResultResponse actual = sut.judge("hogehoge", request);
+		
+		assertEquals("りんご", actual.getWord());
+		verify(shiritoriRepository, times(0)).saveWord(anyString(), any());
+		
+	}
+	
+	@Test
+	void judge_何かしらの問題が発生した場合_RuntimeExceptionをスローすること() {
+		
+		ShiritoriWordRequest request = new ShiritoriWordRequest();
+		request.setWord("りんご");
+		
+		doThrow(new RuntimeException()).when(shiritoriRepository).getEntryId(anyString());
+		
+		assertThrows(RuntimeException.class, () -> {
+			sut.judge("hogehoge", request);
 		});
 		
 	}
