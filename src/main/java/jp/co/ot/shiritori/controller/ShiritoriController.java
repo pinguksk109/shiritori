@@ -57,12 +57,15 @@ public class ShiritoriController {
 	}
 	
 	@DeleteMapping("delete/entryId/{entryId}")
-	public ResponseEntity<?> deleteWord(@PathVariable("entryId") String entryId, BindingResult bindingResult) throws BadRequestException {
-	
+	public ResponseEntity<?> deleteWord(@PathVariable("entryId") String entryId) throws BadRequestException {
 		
+		ShiritoriResultResponse response = shiritoriService.deleteWord(entryId);
 		
-		return null;
+		if(Objects.isNull(response)) {
+			ResponseEntity.status(HttpStatus.NO_CONTENT).body("登録されたキーワードがありせんでした");
+		}
+		
+		return ResponseEntity.ok().body(response);
 	}
-	
 
 }

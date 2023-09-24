@@ -139,5 +139,59 @@ class ShiritoriServiceTest extends ShiritoriService {
 		});
 		
 	}
+	
+	@Test
+	void deleteWord_キーワードの削除をした場合_削除したキーワードを返すこと() throws BadRequestException {
+		
+		EntryIdResponse idResponse = new EntryIdResponse();
+		idResponse.setEntryId("hogehoge");
+		doReturn(idResponse).when(shiritoriRepository).getEntryId(anyString());
+		
+		ShiritoriResultResponse response = new ShiritoriResultResponse("りんご");
+		doReturn(response).when(shiritoriRepository).getLastKeyword(anyString());
+		
+		doNothing().when(shiritoriRepository).deleteWord(anyString());
+		
+		ShiritoriResultResponse actual = sut.deleteWord("hogehoge");
+		assertEquals("りんご", actual.getWord());
+		
+	}
+	
+	@Test
+	void deleteWord_登録されたキーワードがない場合_Nullが返却されること() throws BadRequestException {
+		
+		EntryIdResponse idResponse = new EntryIdResponse();
+		idResponse.setEntryId("hogehoge");
+		doReturn(idResponse).when(shiritoriRepository).getEntryId(anyString());
+		
+		doReturn(null).when(shiritoriRepository).getLastKeyword(anyString());
+		
+		ShiritoriResultResponse actual = sut.deleteWord("hogehoge");
+		assertNull(actual);
+		
+	}
+	
+	@Test
+	void deleteWord_存在しないEntryIdが指定された場合_BadRequestExceptionがスローされること() throws BadRequestException {
+
+		doReturn(null).when(shiritoriRepository).getEntryId(anyString());
+		
+		assertThrows(BadRequestException.class, () -> {
+			sut.deleteWord("hogehoge");
+		});
+		
+	}
+	
+	@Test
+	void deleteWord_何かしらの問題が発生した場合_RuntimeExceptionがスローされること() throws BadRequestException {
+
+		doReturn(new RuntimeException()).when(shiritoriRepository).getEntryId(anyString());
+		
+		assertThrows(RuntimeException.class, () -> {
+			sut.deleteWord("hogehoge");
+		});
+		
+	}
+
 
 }

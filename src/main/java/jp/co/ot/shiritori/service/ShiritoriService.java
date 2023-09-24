@@ -69,4 +69,32 @@ public class ShiritoriService {
 		return null;
 		
 	}
+	
+	/**
+	 * 指定されたEntryIdの最後に登録されたキーワードを削除する
+	 * @param entryId
+	 * @return
+	 * @throws BadRequestException
+	 */
+	public ShiritoriResultResponse deleteWord(String entryId) throws BadRequestException {
+		
+		// 存在しないentryIdだったら処理を進めない
+		EntryIdResponse entryIdResponse = shiritoriRepository.getEntryId(entryId);
+		
+		if(Objects.isNull(entryIdResponse)) {
+			throw new BadRequestException("EntryIDは存在しませんでした");
+		}
+		
+		ShiritoriResultResponse response = shiritoriRepository.getLastKeyword(entryId);
+		
+		// 登録されたキーワードがなければ処理を中断する
+		if(Objects.isNull(response)) {
+			return null;
+		}
+		
+		shiritoriRepository.deleteWord(entryId);
+		
+		return response;
+		
+	}
 }
