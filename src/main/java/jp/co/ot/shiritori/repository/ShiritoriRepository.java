@@ -40,5 +40,20 @@ public interface ShiritoriRepository {
 	 * @return
 	 */
 	EntryIdResponse getEntryId(String entryId);
+	
+	/**
+	 * 指定EntryIdの最後に登録されたキーワードを削除する
+	 * @param entryId
+	 */
+	void deleteWord(@Param("entryId") String entryId);
+	
+	/**
+	 * 指定EntryIdの最後に登録されたキーワードを取得する
+	 * @param entryId
+	 * @return
+	 */
+	ShiritoriResultResponse getLastKeyword(@Param("entryId") String entryId);
+	
+	
 
 }

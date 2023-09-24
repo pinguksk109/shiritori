@@ -38,5 +38,25 @@
 		VALUES
 			(#{entryId}, #{request.word});
 	</insert>
+	
+	<select id="getLastKeyword" resultType="jp.co.ot.shiritori.domain.response.ShiritoriResultResponse">
+		SELECT 
+			word
+		FROM 
+			training.shiritori
+		WHERE 
+			entry = #{entryId}
+		ORDER BY id DESC
+		LIMIT 1;
+	</select>
+	
+	<delete id="deleteWord">
+		DELETE FROM 
+			training.shiritori
+		WHERE 
+			entry = #{entryId}
+		ORDER BY id DESC
+		LIMIT 1;
+	</delete>
 
 </mapper>

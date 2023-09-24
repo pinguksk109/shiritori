@@ -6,7 +6,6 @@ import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import jp.co.ot.shiritori.domain.request.ShiritoriEntryRequest;
@@ -14,7 +13,7 @@ import jp.co.ot.shiritori.domain.request.ShiritoriWordRequest;
 import jp.co.ot.shiritori.domain.response.EntryIdResponse;
 import jp.co.ot.shiritori.domain.response.ShiritoriResultResponse;
 
-@SpringBootTest
+//@SpringBootTest
 @RunWith(SpringRunner.class)
 public class ShiritoriRepositoryTest {
 
@@ -65,7 +64,7 @@ public class ShiritoriRepositoryTest {
 	}
 	
 	@Test
-//	@Ignore
+	@Ignore
 	public void getEntryId_EntryIdを取得できること() {
 		try {
 			EntryIdResponse actual = sut.getEntryId("testhhogehoge30");
@@ -76,6 +75,33 @@ public class ShiritoriRepositoryTest {
 			System.out.println("============================");
 		}
 	}
+	
+	@Test
+	@Ignore
+	public void getLastKeyword_最後に登録したKeywordを取得できること() {
+		try {
+			ShiritoriResultResponse actual = sut.getLastKeyword("testhoge30");
+			assertEquals("うんこ", actual.getWord());
+		} catch (Exception e) {
+			System.out.println("============================");
+			System.out.println(e);
+			System.out.println("============================");
+		}
+	}
+	
+	@Test
+	@Ignore
+	public void deleteWord_最後に登録したキーワードを取得できること() {
+		try {
+			sut.deleteWord("testhoge30");
+		} catch (Exception e) {
+			System.out.println("============================");
+			System.out.println(e);
+			System.out.println("============================");
+		}
+	}
+	
+	
 	
 	
 	
