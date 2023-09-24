@@ -185,7 +185,7 @@ class ShiritoriServiceTest extends ShiritoriService {
 	@Test
 	void deleteWord_何かしらの問題が発生した場合_RuntimeExceptionがスローされること() throws BadRequestException {
 
-		doReturn(new RuntimeException()).when(shiritoriRepository).getEntryId(anyString());
+		doThrow(new RuntimeException()).when(shiritoriRepository).getEntryId(anyString());
 		
 		assertThrows(RuntimeException.class, () -> {
 			sut.deleteWord("hogehoge");

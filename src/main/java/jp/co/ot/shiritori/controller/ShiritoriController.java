@@ -62,7 +62,7 @@ public class ShiritoriController {
 		ShiritoriResultResponse response = shiritoriService.deleteWord(entryId);
 		
 		if(Objects.isNull(response)) {
-			ResponseEntity.status(HttpStatus.NO_CONTENT).body("登録されたキーワードがありせんでした");
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("登録されたキーワードがありせんでした");
 		}
 		
 		return ResponseEntity.ok().body(response);

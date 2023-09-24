@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import jp.co.ot.shiritori.domain.exception.BadRequestException;
 import jp.co.ot.shiritori.domain.exception.ConflictException;
 import jp.co.ot.shiritori.domain.response.ShiritoriEntryResponse;
+import jp.co.ot.shiritori.domain.response.ShiritoriResultResponse;
 import jp.co.ot.shiritori.service.ShiritoriService;
 
 
@@ -63,20 +64,6 @@ class ShiritoriControllerTest extends ShiritoriController {
                 .content(requestBody)
                 .accept(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.status().isConflict());
-	}
-	
-	@Test
-	void POST_entry_何かしらの問題が発生した場合_HTTPステータス500を返すこと() throws Exception {
-		doThrow(new RuntimeException()).when(shiritoriService).entry(any());
-		
-		String requestBody = "{\"entryId\": \"hogehoge\"}";
-	
-		mvc.perform(MockMvcRequestBuilders.post("/v1/shiritori/entry")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody)
-                .accept(MediaType.APPLICATION_JSON))
-				.andExpect(MockMvcResultMatchers.status().isInternalServerError())
-				.andReturn();
 	}
 	
 	@Test
@@ -140,19 +127,35 @@ class ShiritoriControllerTest extends ShiritoriController {
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andReturn();
 	}
-
+	
 	@Test
-	void POST_judge_何かしらの問題が発生した場合_HTTPステータス500を返すこと() throws Exception {
-		doThrow(new RuntimeException()).when(shiritoriService).judge(anyString(), any());
-		String requestBody = "{\"word\": \"りんご\"}";
+	void DELETE_deleteWord_処理が正常に行われた場合_HTTPステータス200を返すこと() throws Exception {
+		doReturn(new ShiritoriResultResponse("りんご")).when(shiritoriService).deleteWord(anyString());
 		
-        mvc.perform(MockMvcRequestBuilders.post("/v1/shiritori/judge/entryId/hogehoge")
+        mvc.perform(MockMvcRequestBuilders.delete("/v1/shiritori/delete/entryId/hogehoge")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody)
                 .accept(MediaType.APPLICATION_JSON))
-				.andExpect(MockMvcResultMatchers.status().isInternalServerError());
+				.andExpect(MockMvcResultMatchers.status().isOk());
 	}
 	
+	@Test
+	void DELETE_deleteWord_登録されたキーワードがない場合_HTTPステータス204を返すこと() throws Exception {
+		doReturn(null).when(shiritoriService).deleteWord(anyString());
+		
+        mvc.perform(MockMvcRequestBuilders.delete("/v1/shiritori/delete/entryId/hogehoge")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().isNoContent());
+	}
 	
+	@Test
+	void DELETE_deleteWord_BadRequestExceptionがスローされた場合_HTTPステータス400を返すこと() throws Exception {
+		doThrow(new BadRequestException(null)).when(shiritoriService).deleteWord(anyString());
+		
+        mvc.perform(MockMvcRequestBuilders.delete("/v1/shiritori/delete/entryId/hogehoge")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest());
+	}
 
 }
