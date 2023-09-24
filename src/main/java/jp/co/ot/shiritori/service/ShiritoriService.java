@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jp.co.ot.shiritori.domain.exception.BadRequestException;
+import jp.co.ot.shiritori.domain.exception.ConflictException;
 import jp.co.ot.shiritori.domain.request.ShiritoriEntryRequest;
 import jp.co.ot.shiritori.domain.request.ShiritoriWordRequest;
 import jp.co.ot.shiritori.domain.response.EntryIdResponse;
@@ -23,14 +24,15 @@ public class ShiritoriService {
 	 * EntryIdの保存を行う
 	 * @param request
 	 * @return
+	 * @throws ConflictException 
 	 */
-	public ShiritoriEntryResponse entry(ShiritoriEntryRequest request) {
+	public ShiritoriEntryResponse entry(ShiritoriEntryRequest request) throws ConflictException {
 		
 		// 存在するentryIdだったら処理を進めない
 		EntryIdResponse entryIdResponse = shiritoriRepository.getEntryId(request.getEntryId());
 		
 		if(!Objects.isNull(entryIdResponse)) {
-			throw new BadRequestException(request.getEntryId());
+			throw new ConflictException(request.getEntryId());
 		}
 		
 		shiritoriRepository.entry(request);
@@ -44,8 +46,9 @@ public class ShiritoriService {
 	 * @param entryId
 	 * @param request
 	 * @return
+	 * @throws BadRequestException 
 	 */
-	public ShiritoriResultResponse judge(String entryId, ShiritoriWordRequest request) {
+	public ShiritoriResultResponse judge(String entryId, ShiritoriWordRequest request) throws BadRequestException {
 		
 		// 存在しないentryIdだったら処理を進めない
 		EntryIdResponse entryIdResponse = shiritoriRepository.getEntryId(entryId);

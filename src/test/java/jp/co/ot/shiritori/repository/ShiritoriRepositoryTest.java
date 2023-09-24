@@ -65,11 +65,11 @@ public class ShiritoriRepositoryTest {
 	}
 	
 	@Test
-	@Ignore
+//	@Ignore
 	public void getEntryId_EntryIdを取得できること() {
 		try {
-			EntryIdResponse actual = sut.getEntryId("testhoge30");
-			assertEquals("testhoge30", actual);
+			EntryIdResponse actual = sut.getEntryId("testhhogehoge30");
+			assertEquals("testhhogehoge30", actual.getEntryId());
 		} catch (Exception e) {
 			System.out.println("============================");
 			System.out.println(e);

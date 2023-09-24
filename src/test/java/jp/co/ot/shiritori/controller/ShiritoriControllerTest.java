@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import jp.co.ot.shiritori.domain.exception.BadRequestException;
+import jp.co.ot.shiritori.domain.exception.ConflictException;
 import jp.co.ot.shiritori.domain.response.ShiritoriEntryResponse;
 import jp.co.ot.shiritori.service.ShiritoriService;
 
@@ -52,16 +53,16 @@ class ShiritoriControllerTest extends ShiritoriController {
 	}
 	
 	@Test
-	void POST_entry_Serviceが400を返した場合_HTTPステータス400を返すこと() throws Exception {	
-		doThrow(new BadRequestException(null)).when(shiritoriService).entry(any());
+	void POST_entry_Serviceが409を返した場合_HTTPステータス400を返すこと() throws Exception {	
+		doThrow(new ConflictException(null)).when(shiritoriService).entry(any());
 		
-		String requestBody = "{\"entryId\": \"hogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehoge\"}";
+		String requestBody = "{\"entryId\": \"hogehogehogehoge\"}";
 	
 		mvc.perform(MockMvcRequestBuilders.post("/v1/shiritori/entry")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody)
                 .accept(MediaType.APPLICATION_JSON))
-				.andExpect(MockMvcResultMatchers.status().isBadRequest());
+				.andExpect(MockMvcResultMatchers.status().isConflict());
 	}
 	
 	@Test
@@ -149,8 +150,7 @@ class ShiritoriControllerTest extends ShiritoriController {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody)
                 .accept(MediaType.APPLICATION_JSON))
-				.andExpect(MockMvcResultMatchers.status().isInternalServerError())
-				.andReturn();
+				.andExpect(MockMvcResultMatchers.status().isInternalServerError());
 	}
 	
 	

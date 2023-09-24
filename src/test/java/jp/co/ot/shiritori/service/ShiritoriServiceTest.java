@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import jp.co.ot.shiritori.domain.exception.BadRequestException;
+import jp.co.ot.shiritori.domain.exception.ConflictException;
 import jp.co.ot.shiritori.domain.request.ShiritoriEntryRequest;
 import jp.co.ot.shiritori.domain.request.ShiritoriWordRequest;
 import jp.co.ot.shiritori.domain.response.EntryIdResponse;
@@ -28,7 +29,7 @@ class ShiritoriServiceTest extends ShiritoriService {
 	private ShiritoriRepository shiritoriRepository;
 	
 	@Test
-	void entry_データを保存できること() {
+	void entry_データを保存できること() throws ConflictException {
 		
 		ShiritoriEntryRequest request = new ShiritoriEntryRequest();
 		request.setEntryId("hogehoge");
@@ -42,7 +43,7 @@ class ShiritoriServiceTest extends ShiritoriService {
 	}
 	
 	@Test
-	void entry_既に存在するentryの場合_BadRequestExceptionをスローすること() { 
+	void entry_既に存在するentryの場合_ConflictExceptionをスローすること() { 
 		
 		ShiritoriEntryRequest request = new ShiritoriEntryRequest();
 		request.setEntryId("hogehoge");
@@ -52,7 +53,7 @@ class ShiritoriServiceTest extends ShiritoriService {
 		
 		doReturn(response).when(shiritoriRepository).getEntryId(anyString());
 		
-		assertThrows(BadRequestException.class, () -> {
+		assertThrows(ConflictException.class, () -> {
 			sut.entry(request);
 		});
 	}
@@ -71,7 +72,7 @@ class ShiritoriServiceTest extends ShiritoriService {
 	}
 	
 	@Test
-	void judge_データを保存できること() {
+	void judge_データを保存できること() throws BadRequestException {
 		
 		ShiritoriWordRequest request = new ShiritoriWordRequest();
 		request.setWord("りんご");
@@ -105,7 +106,7 @@ class ShiritoriServiceTest extends ShiritoriService {
 	}
 	
 	@Test
-	void judge_既にしりとりで出ているキーワードの場合_そのキーワードを返すこと() {
+	void judge_既にしりとりで出ているキーワードの場合_そのキーワードを返すこと() throws BadRequestException {
 		
 		ShiritoriWordRequest request = new ShiritoriWordRequest();
 		request.setWord("りんご");

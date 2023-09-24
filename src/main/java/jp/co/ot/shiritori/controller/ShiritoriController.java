@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jp.co.ot.shiritori.domain.exception.BadRequestException;
+import jp.co.ot.shiritori.domain.exception.ConflictException;
 import jp.co.ot.shiritori.domain.request.ShiritoriEntryRequest;
 import jp.co.ot.shiritori.domain.request.ShiritoriWordRequest;
 import jp.co.ot.shiritori.domain.response.ShiritoriResultResponse;
@@ -28,7 +29,7 @@ public class ShiritoriController {
 	private ShiritoriService shiritoriService;
 	
 	@PostMapping("/entry")
-	public ResponseEntity<?> entry(@RequestBody @Valid ShiritoriEntryRequest request, BindingResult bindingResult) {
+	public ResponseEntity<?> entry(@RequestBody @Valid ShiritoriEntryRequest request, BindingResult bindingResult) throws BadRequestException, ConflictException {
 	
 		if(bindingResult.hasErrors()) {
 			throw new BadRequestException("entryIdに不正がありました");
@@ -39,7 +40,7 @@ public class ShiritoriController {
 	}
 	
 	@PostMapping("judge/entryId/{entryId}")
-	public ResponseEntity<?> judge(@PathVariable("entryId") @NotBlank String entryId, @RequestBody @Valid ShiritoriWordRequest request, BindingResult bindingResult) {
+	public ResponseEntity<?> judge(@PathVariable("entryId") @NotBlank String entryId, @RequestBody @Valid ShiritoriWordRequest request, BindingResult bindingResult) throws BadRequestException {
 	
 		if(bindingResult.hasErrors()) {
 			throw new BadRequestException("ワードに不正がありました");

@@ -35,7 +35,7 @@ public interface ShiritoriRepository {
 	void saveWord(@Param("entryId") String entryId, @Param("request") ShiritoriWordRequest request);
 
 	/**
-	 * エントリーIdを保存します
+	 * エントリーIdを取得する
 	 * @param entryId
 	 * @return
 	 */

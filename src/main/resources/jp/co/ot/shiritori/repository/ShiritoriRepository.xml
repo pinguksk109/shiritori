@@ -12,9 +12,9 @@
 			(#{entryId});
 	</insert>
 	
-		<select id="getEntryId" resultType="jp.co.ot.shiritori.domain.response.EntryIdResponse">
+	<select id="getEntryId" resultType="jp.co.ot.shiritori.domain.response.EntryIdResponse">
 		SELECT
-			entry
+			entry AS entryId
 		FROM
 			training.shiritori_entry
 		WHERE
