@@ -9,6 +9,7 @@ import jp.co.ot.shiritori.domain.exception.BadRequestException;
 import jp.co.ot.shiritori.domain.exception.ConflictException;
 import jp.co.ot.shiritori.domain.request.ShiritoriEntryRequest;
 import jp.co.ot.shiritori.domain.request.ShiritoriWordRequest;
+import jp.co.ot.shiritori.domain.request.ShiritoriWordRequestDto;
 import jp.co.ot.shiritori.domain.response.EntryIdResponse;
 import jp.co.ot.shiritori.domain.response.ShiritoriEntryResponse;
 import jp.co.ot.shiritori.domain.response.ShiritoriResultResponse;
@@ -64,6 +65,9 @@ public class ShiritoriService {
 			return response;
 		}
 		
+		// りんごとリンゴの違いを防ぎたい
+		
+		ShiritoriWordRequestDto dto = new ShiritoriWordRequestDto(request);
 		shiritoriRepository.saveWord(entryId, request);
 		
 		return null;
