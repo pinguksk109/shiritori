@@ -65,10 +65,8 @@ public class ShiritoriService {
 			return response;
 		}
 		
-		// りんごとリンゴの違いを防ぎたい
-		
 		ShiritoriWordRequestDto dto = new ShiritoriWordRequestDto(request);
-		shiritoriRepository.saveWord(entryId, request);
+		shiritoriRepository.saveWord(entryId, dto);
 		
 		return null;
 		

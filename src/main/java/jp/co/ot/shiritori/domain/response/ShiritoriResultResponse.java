@@ -6,5 +6,6 @@ import lombok.Value;
 public class ShiritoriResultResponse {
 
 	private String word;
+	private String rawWord;
 	
 }

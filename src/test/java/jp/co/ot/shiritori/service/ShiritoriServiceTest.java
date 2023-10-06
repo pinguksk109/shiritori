@@ -114,7 +114,7 @@ class ShiritoriServiceTest extends ShiritoriService {
 		EntryIdResponse idResponse = new EntryIdResponse();
 		idResponse.setEntryId("hogehoge");
 		
-		ShiritoriResultResponse shiritoriResponse = new ShiritoriResultResponse("りんご");
+		ShiritoriResultResponse shiritoriResponse = new ShiritoriResultResponse("りんご", "リンゴ");
 		
 		doReturn(idResponse).when(shiritoriRepository).getEntryId(anyString());
 		doReturn(shiritoriResponse).when(shiritoriRepository).judge(anyString(), any());
@@ -147,7 +147,7 @@ class ShiritoriServiceTest extends ShiritoriService {
 		idResponse.setEntryId("hogehoge");
 		doReturn(idResponse).when(shiritoriRepository).getEntryId(anyString());
 		
-		ShiritoriResultResponse response = new ShiritoriResultResponse("りんご");
+		ShiritoriResultResponse response = new ShiritoriResultResponse("りんご", "リンゴ");
 		doReturn(response).when(shiritoriRepository).getLastKeyword(anyString());
 		
 		doNothing().when(shiritoriRepository).deleteWord(anyString());

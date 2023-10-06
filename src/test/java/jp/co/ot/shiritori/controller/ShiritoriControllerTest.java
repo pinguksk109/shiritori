@@ -104,6 +104,30 @@ class ShiritoriControllerTest extends ShiritoriController {
 	}
 	
 	@Test
+	void POST_judge_キーワードに半角カタカナが含まれる場合_HTTPステータス400を返すこと() throws Exception {
+		String requestBody = "{\"word\": \"ﾘﾝｺﾞ\"}";
+		
+        mvc.perform(MockMvcRequestBuilders.post("/v1/shiritori/judge/entryId/hogehoge")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andReturn();
+	}
+	
+	@Test
+	void POST_judge_キーワードに漢字が含まれる場合_HTTPステータス400を返すこと() throws Exception {
+		String requestBody = "{\"word\": \"林檎ﾞ\"}";
+		
+        mvc.perform(MockMvcRequestBuilders.post("/v1/shiritori/judge/entryId/hogehoge")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andReturn();
+	}
+	
+	@Test
 	void POST_judge_キーワードがNullの場合_HTTPステータス400を返すこと() throws Exception {
 		String requestBody = "";
 		
@@ -130,7 +154,7 @@ class ShiritoriControllerTest extends ShiritoriController {
 	
 	@Test
 	void DELETE_deleteWord_処理が正常に行われた場合_HTTPステータス200を返すこと() throws Exception {
-		doReturn(new ShiritoriResultResponse("りんご")).when(shiritoriService).deleteWord(anyString());
+		doReturn(new ShiritoriResultResponse("りんご", "リンゴ")).when(shiritoriService).deleteWord(anyString());
 		
         mvc.perform(MockMvcRequestBuilders.delete("/v1/shiritori/delete/entryId/hogehoge")
                 .contentType(MediaType.APPLICATION_JSON)

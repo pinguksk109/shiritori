@@ -8,7 +8,7 @@ public class ShiritoriWordRequestDto {
 	private String word;
 	
 	public ShiritoriWordRequestDto(ShiritoriWordRequest request) {
-		this.rawWord = rawWord;
+		this.rawWord = request.getWord();
 		this.word = convertKatakanaToHiragana(request.getWord());	}
 	
     public static String convertKatakanaToHiragana(String katakana) {

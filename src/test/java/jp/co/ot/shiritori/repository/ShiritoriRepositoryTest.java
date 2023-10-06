@@ -2,18 +2,20 @@ package jp.co.ot.shiritori.repository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import jp.co.ot.shiritori.domain.request.ShiritoriEntryRequest;
 import jp.co.ot.shiritori.domain.request.ShiritoriWordRequest;
+import jp.co.ot.shiritori.domain.request.ShiritoriWordRequestDto;
 import jp.co.ot.shiritori.domain.response.EntryIdResponse;
 import jp.co.ot.shiritori.domain.response.ShiritoriResultResponse;
 
-//@SpringBootTest
+@SpringBootTest
 @RunWith(SpringRunner.class)
 public class ShiritoriRepositoryTest {
 
@@ -21,7 +23,7 @@ public class ShiritoriRepositoryTest {
 	private ShiritoriRepository sut;
 	
 	@Test
-	@Ignore
+	@Disabled
 	public void entry_entryIdを保存できること() {
 		ShiritoriEntryRequest request = new ShiritoriEntryRequest();
 		request.setEntryId("testhoge30");
@@ -35,7 +37,7 @@ public class ShiritoriRepositoryTest {
 	}
 	
 	@Test
-	@Ignore
+	@Disabled
 	public void judge_ワードを取得できること() {
 		ShiritoriWordRequest request = new ShiritoriWordRequest();
 		request.setWord("うんこ");
@@ -50,12 +52,13 @@ public class ShiritoriRepositoryTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void saveWord_キーワードを保存できること() {
 		ShiritoriWordRequest request = new ShiritoriWordRequest();
-		request.setWord("うんこ");
+		request.setWord("リンゴ");
+		ShiritoriWordRequestDto requestDto = new ShiritoriWordRequestDto(request);
 		try {
-			sut.saveWord("testhoge30", request);
+			sut.saveWord("testhoge30", requestDto);
 		} catch (Exception e) {
 			System.out.println("============================");
 			System.out.println(e);
@@ -64,7 +67,7 @@ public class ShiritoriRepositoryTest {
 	}
 	
 	@Test
-	@Ignore
+	@Disabled
 	public void getEntryId_EntryIdを取得できること() {
 		try {
 			EntryIdResponse actual = sut.getEntryId("testhhogehoge30");
@@ -77,7 +80,7 @@ public class ShiritoriRepositoryTest {
 	}
 	
 	@Test
-	@Ignore
+	@Disabled
 	public void getLastKeyword_最後に登録したKeywordを取得できること() {
 		try {
 			ShiritoriResultResponse actual = sut.getLastKeyword("testhoge30");
@@ -90,7 +93,7 @@ public class ShiritoriRepositoryTest {
 	}
 	
 	@Test
-	@Ignore
+	@Disabled
 	public void deleteWord_最後に登録したキーワードを取得できること() {
 		try {
 			sut.deleteWord("testhoge30");

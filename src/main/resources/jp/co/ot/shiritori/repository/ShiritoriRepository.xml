@@ -23,7 +23,8 @@
 	
 	<select id="judge" resultType="jp.co.ot.shiritori.domain.response.ShiritoriResultResponse">
 		SELECT
-			word
+			word,
+			raw_word AS rawWord
 		FROM
 			training.shiritori
 		WHERE
@@ -34,9 +35,9 @@
 	
 	<insert id="saveWord">
 		INSERT INTO
-			training.shiritori (entry, word)
+			training.shiritori (entry, word, raw_word)
 		VALUES
-			(#{entryId}, #{request.word});
+			(#{entryId}, #{request.word}, #{request.rawWord});
 	</insert>
 	
 	<select id="getLastKeyword" resultType="jp.co.ot.shiritori.domain.response.ShiritoriResultResponse">

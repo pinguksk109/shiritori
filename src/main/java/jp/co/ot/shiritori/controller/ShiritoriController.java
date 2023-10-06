@@ -47,6 +47,10 @@ public class ShiritoriController {
 			throw new BadRequestException("ワードに不正がありました");
 		}
 		
+		if(isKatakana(request.getWord())) {
+			throw new BadRequestException("キーワードには半角スペースを含めることはできません");			
+		}
+		
 		ShiritoriResultResponse response = shiritoriService.judge(entryId, request);
 		
 		if(!Objects.isNull(response)) {
@@ -67,5 +71,16 @@ public class ShiritoriController {
 		
 		return ResponseEntity.ok().body(response);
 	}
+	
+	/**
+	 * 受け取った引数が半角カタカナかどうかをbooleanで返す
+	 * リクエストボディの@Patterで半角カタカナのバリデーションが通らないため自前で実装
+	 * @param input
+	 * @return
+	 */
+    private static boolean isKatakana(String input) {
+        // 正規表現で半角カタカナのみを許可する条件をチェックする
+        return input.matches("^[ｱ-ﾝﾞﾟ]+$");
+    }
 
 }
