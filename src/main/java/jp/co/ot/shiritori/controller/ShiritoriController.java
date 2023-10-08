@@ -43,12 +43,8 @@ public class ShiritoriController {
 	@PostMapping("judge/entryId/{entryId}")
 	public ResponseEntity<?> judge(@PathVariable("entryId") @NotBlank String entryId, @RequestBody @Valid ShiritoriWordRequest request, BindingResult bindingResult) throws BadRequestException {
 	
-		if(bindingResult.hasErrors()) {
+		if(bindingResult.hasErrors() || isKatakana(request.getWord())) {
 			throw new BadRequestException("ワードに不正がありました");
-		}
-		
-		if(isKatakana(request.getWord())) {
-			throw new BadRequestException("キーワードには半角スペースを含めることはできません");			
 		}
 		
 		ShiritoriResultResponse response = shiritoriService.judge(entryId, request);
