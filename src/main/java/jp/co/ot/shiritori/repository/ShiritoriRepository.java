@@ -5,7 +5,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import jp.co.ot.shiritori.domain.request.ShiritoriEntryRequest;
-import jp.co.ot.shiritori.domain.request.ShiritoriWordRequest;
 import jp.co.ot.shiritori.domain.request.ShiritoriWordRequestDto;
 import jp.co.ot.shiritori.domain.response.EntryIdResponse;
 import jp.co.ot.shiritori.domain.response.ShiritoriResultResponse;
@@ -26,7 +25,7 @@ public interface ShiritoriRepository {
 	 * @param request
 	 * @return
 	 */
-	ShiritoriResultResponse judge(@Param("entryId") String entryId, @Param("request") ShiritoriWordRequest request);
+	ShiritoriResultResponse judge(@Param("entryId") String entryId, @Param("request") ShiritoriWordRequestDto request);
 
 	/**
 	 * しりとりのキーワードを保存します

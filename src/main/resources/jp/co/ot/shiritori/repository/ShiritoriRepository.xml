@@ -23,8 +23,8 @@
 	
 	<select id="judge" resultType="jp.co.ot.shiritori.domain.response.ShiritoriResultResponse">
 		SELECT
-			word,
-			raw_word AS rawWord
+			raw_word AS rawWord,
+			word
 		FROM
 			training.shiritori
 		WHERE

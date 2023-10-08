@@ -42,7 +42,7 @@ public class ShiritoriRepositoryTest {
 		ShiritoriWordRequest request = new ShiritoriWordRequest();
 		request.setWord("うんこ");
 		try {
-			ShiritoriResultResponse actual = sut.judge("hogehoge", request);
+			ShiritoriResultResponse actual = sut.judge("hogehoge", new ShiritoriWordRequestDto(request));
 			assertEquals("うんこ", actual.getWord());
 		} catch (Exception e) {
 			System.out.println("============================");

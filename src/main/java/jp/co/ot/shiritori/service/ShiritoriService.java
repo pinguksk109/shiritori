@@ -58,7 +58,7 @@ public class ShiritoriService {
 			throw new BadRequestException(entryId);
 		}
 		
-		ShiritoriResultResponse response = shiritoriRepository.judge(entryId, request);
+		ShiritoriResultResponse response = shiritoriRepository.judge(entryId, new ShiritoriWordRequestDto(request));
 		
 		// 既にしりとりで出ているワードだったら、該当単語のレスポンスを返却する
 		if(!Objects.isNull(response)) {

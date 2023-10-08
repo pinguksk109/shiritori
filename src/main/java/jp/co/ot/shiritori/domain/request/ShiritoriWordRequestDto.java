@@ -2,6 +2,9 @@ package jp.co.ot.shiritori.domain.request;
 
 import java.text.Normalizer;
 
+import lombok.Value;
+
+@Value
 public class ShiritoriWordRequestDto {
 
 	private String rawWord;
