@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -223,13 +224,12 @@ class ShiritoriControllerTest extends ShiritoriController {
 		
         MvcResult actual = mvc.perform(get("/v1/shiritori/all/entryId/hogehoge")
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .characterEncoding("UTF-8")) 
+                .accept(MediaType.APPLICATION_JSON))
                 .andReturn();
         
         String expected = "{\"wordCount\":3,\"word\":[\"リンゴ\",\"ゴリラ\",\"らっぱ\"]}";
         
-        assertEquals(expected, actual.getResponse().getContentAsString());
+        assertEquals(expected, actual.getResponse().getContentAsString(StandardCharsets.UTF_8));
 	}
 	
 	@Test
