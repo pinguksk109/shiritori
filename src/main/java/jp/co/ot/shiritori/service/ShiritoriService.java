@@ -1,5 +1,6 @@
 package jp.co.ot.shiritori.service;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import jp.co.ot.shiritori.domain.request.ShiritoriEntryRequest;
 import jp.co.ot.shiritori.domain.request.ShiritoriWordRequest;
 import jp.co.ot.shiritori.domain.request.ShiritoriWordRequestDto;
 import jp.co.ot.shiritori.domain.response.EntryIdResponse;
+import jp.co.ot.shiritori.domain.response.ShiritoriAllKeywordResultResponseDto;
 import jp.co.ot.shiritori.domain.response.ShiritoriEntryResponse;
 import jp.co.ot.shiritori.domain.response.ShiritoriResultResponse;
 import jp.co.ot.shiritori.repository.ShiritoriRepository;
@@ -98,5 +100,29 @@ public class ShiritoriService {
 		
 		return response;
 		
+	}
+
+	/**
+	 * エントリーIDに紐づくキーワードをすべて取得する
+	 * @param entryId
+	 * @return
+	 * @throws BadRequestException
+	 */
+	public ShiritoriAllKeywordResultResponseDto allGetWord(String entryId) throws BadRequestException {
+
+		// 存在しないentryIdだったら処理を進めない
+		EntryIdResponse entryIdResponse = shiritoriRepository.getEntryId(entryId);
+		
+		if(Objects.isNull(entryIdResponse)) {
+			throw new BadRequestException("EntryIDは存在しませんでした");
+		}
+		
+		List<String> word = shiritoriRepository.allGetKeyword(entryId);
+		
+		if(Objects.isNull(word)) {
+			return null;
+		}
+		
+		return new ShiritoriAllKeywordResultResponseDto(word);
 	}
 }

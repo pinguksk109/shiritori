@@ -59,5 +59,14 @@
 		ORDER BY id DESC
 		LIMIT 1;
 	</delete>
+	
+	<select id="allGetKeyword" resultType="java.lang.String">
+		SELECT 
+			raw_word AS word
+		FROM 
+			training.shiritori
+		WHERE 
+			entry = #{entryId};
+	</select>
 
 </mapper>

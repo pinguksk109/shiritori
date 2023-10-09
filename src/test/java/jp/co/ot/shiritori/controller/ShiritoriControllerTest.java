@@ -1,21 +1,30 @@
 package jp.co.ot.shiritori.controller;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import jp.co.ot.shiritori.domain.exception.BadRequestException;
 import jp.co.ot.shiritori.domain.exception.ConflictException;
+import jp.co.ot.shiritori.domain.response.ShiritoriAllKeywordResultResponseDto;
 import jp.co.ot.shiritori.domain.response.ShiritoriEntryResponse;
 import jp.co.ot.shiritori.domain.response.ShiritoriResultResponse;
 import jp.co.ot.shiritori.service.ShiritoriService;
@@ -23,6 +32,7 @@ import jp.co.ot.shiritori.service.ShiritoriService;
 
 class ShiritoriControllerTest extends ShiritoriController {
 
+    @Autowired
 	private MockMvc mvc;
 	
 	@InjectMocks
@@ -181,5 +191,72 @@ class ShiritoriControllerTest extends ShiritoriController {
                 .accept(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest());
 	}
-
+	
+	@Test
+	void GET_allGetWord_処理が正常に行われた場合_HTTPステータス200を返すこと() throws Exception {
+		
+        List<String> word = new ArrayList<>();
+        word.add("リンゴ");
+        word.add("ゴリラ");
+        word.add("らっぱ");
+		ShiritoriAllKeywordResultResponseDto dto = new ShiritoriAllKeywordResultResponseDto(word);
+		
+		doReturn(dto).when(shiritoriService).allGetWord(anyString());
+		
+        mvc.perform(get("/v1/shiritori/all/entryId/hogehoge")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+	}
+	
+	@Test
+	void GET_allGetWord_処理が正常に行われた場合_キーワードを返すこと() throws Exception {
+		
+        List<String> word = new ArrayList<>();
+        word.add("リンゴ");
+        word.add("ゴリラ");
+        word.add("らっぱ");
+		ShiritoriAllKeywordResultResponseDto dto = new ShiritoriAllKeywordResultResponseDto(word);
+		
+		doReturn(dto).when(shiritoriService).allGetWord(anyString());
+		
+        MvcResult actual = mvc.perform(get("/v1/shiritori/all/entryId/hogehoge")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")) 
+                .andReturn();
+        
+        String expected = "{\"wordCount\":3,\"word\":[\"リンゴ\",\"ゴリラ\",\"らっぱ\"]}";
+        
+        assertEquals(expected, actual.getResponse().getContentAsString());
+	}
+	
+	@Test
+	void GET_allGetWord_処理が正常に行われServiceからNullが返却された場合_HTTPステータスコードのみ返すこと() throws Exception {
+		
+		doReturn(null).when(shiritoriService).allGetWord(anyString());
+		
+		MvcResult actual = mvc.perform(get("/v1/shiritori/all/entryId/hogehoge")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+		
+		String expected = "";
+		
+		assertEquals(expected, actual.getResponse().getContentAsString());
+	}
+	
+	@Test
+	void GET_allGetWord_存在しないEntryIdが指定された場合_HTTPステータスコード400を返すこと() throws Exception {
+		
+		doThrow(new BadRequestException(null)).when(shiritoriService).allGetWord(anyString());
+		
+		mvc.perform(get("/v1/shiritori/all/entryId/hogehoge")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+	}
+	
 }

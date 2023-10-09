@@ -1,5 +1,7 @@
 package jp.co.ot.shiritori.repository;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -53,6 +55,13 @@ public interface ShiritoriRepository {
 	 * @return
 	 */
 	ShiritoriResultResponse getLastKeyword(@Param("entryId") String entryId);
+
+	/**
+	 * 指定されたエントリーIDに紐づくキーワードをすべて取得する
+	 * @param entryId
+	 * @return
+	 */
+	List<String> allGetKeyword(String entryId);
 	
 	
 

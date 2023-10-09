@@ -2,6 +2,8 @@ package jp.co.ot.shiritori.repository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -104,7 +106,23 @@ public class ShiritoriRepositoryTest {
 		}
 	}
 	
-	
+	@Test
+	@Disabled
+	public void allGetKeyword_エントリーIDに紐づくすべてのキーワードを取得できること() {
+		try {
+			List<String> actual = sut.allGetKeyword("testhoge30");
+			assertEquals(5, actual.size());
+			assertEquals("リンゴ", actual.get(0));
+			assertEquals("ごりら", actual.get(1));
+			assertEquals("らっぱ", actual.get(2));
+			assertEquals("パンツ", actual.get(3));
+			assertEquals("つみき", actual.get(4));
+		} catch(Exception e) {
+			System.out.println("============================");
+			System.out.println(e);
+			System.out.println("============================");
+		}
+	}
 	
 	
 	

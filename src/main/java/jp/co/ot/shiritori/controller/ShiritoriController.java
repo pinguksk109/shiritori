@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +30,14 @@ public class ShiritoriController {
 	@Autowired
 	private ShiritoriService shiritoriService;
 	
+	/**
+	 * エントリーIDを登録する
+	 * @param request
+	 * @param bindingResult
+	 * @return
+	 * @throws BadRequestException
+	 * @throws ConflictException
+	 */
 	@PostMapping("/entry")
 	public ResponseEntity<?> entry(@RequestBody @Valid ShiritoriEntryRequest request, BindingResult bindingResult) throws BadRequestException, ConflictException {
 	
@@ -40,6 +49,14 @@ public class ShiritoriController {
 		
 	}
 	
+	/**
+	 * 指定されたエントリーIDがあるかどうかを確認する
+	 * @param entryId
+	 * @param request
+	 * @param bindingResult
+	 * @return
+	 * @throws BadRequestException
+	 */
 	@PostMapping("judge/entryId/{entryId}")
 	public ResponseEntity<?> judge(@PathVariable("entryId") @NotBlank String entryId, @RequestBody @Valid ShiritoriWordRequest request, BindingResult bindingResult) throws BadRequestException {
 	
@@ -53,9 +70,16 @@ public class ShiritoriController {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("入力された単語は既にありました");
 		}
 		
+		// TODO: "入力された単語が「ん」だったら、エラー返したい"
 		return ResponseEntity.ok().build();
 	}
 	
+	/**
+	 * 最後に登録されたキーワードを削除するエンドポイント
+	 * @param entryId
+	 * @return
+	 * @throws BadRequestException
+	 */
 	@DeleteMapping("delete/entryId/{entryId}")
 	public ResponseEntity<?> deleteWord(@PathVariable("entryId") String entryId) throws BadRequestException {
 		
@@ -66,6 +90,19 @@ public class ShiritoriController {
 		}
 		
 		return ResponseEntity.ok().body(response);
+	}
+	
+	/**
+	 * 指定されたエントリーIDに紐づくキーワードをすべて取得する
+	 * @param entryId
+	 * @return
+	 * @throws BadRequestException
+	 */
+	@GetMapping("all/entryId/{entryId}")
+	public ResponseEntity<?> allGetWord(@PathVariable("entryId") String entryId) throws BadRequestException {
+		
+		return ResponseEntity.ok(shiritoriService.allGetWord(entryId));
+		
 	}
 	
 	/**

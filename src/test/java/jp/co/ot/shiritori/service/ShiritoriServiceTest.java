@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,6 +18,7 @@ import jp.co.ot.shiritori.domain.exception.ConflictException;
 import jp.co.ot.shiritori.domain.request.ShiritoriEntryRequest;
 import jp.co.ot.shiritori.domain.request.ShiritoriWordRequest;
 import jp.co.ot.shiritori.domain.response.EntryIdResponse;
+import jp.co.ot.shiritori.domain.response.ShiritoriAllKeywordResultResponseDto;
 import jp.co.ot.shiritori.domain.response.ShiritoriEntryResponse;
 import jp.co.ot.shiritori.domain.response.ShiritoriResultResponse;
 import jp.co.ot.shiritori.repository.ShiritoriRepository;
@@ -192,6 +196,72 @@ class ShiritoriServiceTest extends ShiritoriService {
 		});
 		
 	}
+	
+	@Test
+	void allGetWord_処理が正常に行われた場合_すべてのキーワードを返すこと() throws BadRequestException {
+		
+		List<String> word = new ArrayList<>();
+		word.add("りんご");
+		word.add("ゴリラ");
+		word.add("ラッパ");
+		
+		EntryIdResponse idResponse = new EntryIdResponse();
+		idResponse.setEntryId("testhoge30");
+		
+		doReturn(idResponse).when(shiritoriRepository).getEntryId(anyString());
+		doReturn(word).when(shiritoriRepository).allGetKeyword(anyString());
+
+		
+		ShiritoriAllKeywordResultResponseDto actual = sut.allGetWord("testhoge30");
+		
+		assertEquals(3, actual.getWord().size());
+		assertEquals(3, actual.getWordCount());
+		assertEquals("りんご", actual.getWord().get(0));
+		assertEquals("ゴリラ", actual.getWord().get(1));
+		assertEquals("ラッパ", actual.getWord().get(2));
+		
+	}
+	
+	@Test
+	void allGetWord_存在しないEntryIdが指定された場合_BadRequestExceptionをスローすること() throws BadRequestException {
+		
+		doReturn(null).when(shiritoriRepository).getEntryId(anyString());
+		
+		assertThrows(BadRequestException.class, () -> {
+			sut.allGetWord("testhoge30");
+		});		
+	}
+	
+	@Test
+	void allGetWord_エントリーIDに紐づくキーワードがない場合_Nullを返却すること() throws BadRequestException {
+		
+		EntryIdResponse idResponse = new EntryIdResponse();
+		idResponse.setEntryId("testhoge30");
+		
+		doReturn(idResponse).when(shiritoriRepository).getEntryId(anyString());
+		doReturn(null).when(shiritoriRepository).allGetKeyword(anyString());
+
+		
+		ShiritoriAllKeywordResultResponseDto actual = sut.allGetWord("testhoge30");
+		
+		assertNull(actual);
+	}
+	
+	@Test
+	void allGetWord_何かしらの問題が発生した場合_RuntimeExceptionがスローされること() throws BadRequestException {
+		
+		EntryIdResponse idResponse = new EntryIdResponse();
+		idResponse.setEntryId("testhoge30");
+		
+		doReturn(idResponse).when(shiritoriRepository).getEntryId(anyString());
+		doThrow(new RuntimeException()).when(shiritoriRepository).allGetKeyword(anyString());
+
+		assertThrows(RuntimeException.class, () -> {
+			sut.allGetWord("testhoge30");
+		});
+		
+	}
+
 
 
 }
