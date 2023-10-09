@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import jp.co.ot.shiritori.domain.exception.BadRequestException;
 import jp.co.ot.shiritori.domain.exception.ConflictException;
+import jp.co.ot.shiritori.domain.exception.UnprocessableEntityException;
 import jp.co.ot.shiritori.domain.response.ShiritoriAllKeywordResultResponseDto;
 import jp.co.ot.shiritori.domain.response.ShiritoriEntryResponse;
 import jp.co.ot.shiritori.domain.response.ShiritoriResultResponse;
@@ -65,7 +66,7 @@ class ShiritoriControllerTest extends ShiritoriController {
 	}
 	
 	@Test
-	void POST_entry_Serviceが409を返した場合_HTTPステータス400を返すこと() throws Exception {	
+	void POST_entry_ConflictExceptionがスローされた場合_HTTPステータス400を返すこと() throws Exception {	
 		doThrow(new ConflictException(null)).when(shiritoriService).entry(any());
 		
 		String requestBody = "{\"entryId\": \"hogehogehogehoge\"}";
@@ -151,7 +152,7 @@ class ShiritoriControllerTest extends ShiritoriController {
 	}
 	
 	@Test
-	void POST_judge_存在しないentryIdの場合_HTTPステータス400を返すこと() throws Exception {
+	void POST_judge_BadRequestExceptionがスローされた場合_HTTPステータス400を返すこと() throws Exception {
 		doThrow(new BadRequestException(null)).when(shiritoriService).judge(anyString(), any());
 		String requestBody = "{\"word\": \"りんご\"}";
 		
@@ -160,6 +161,20 @@ class ShiritoriControllerTest extends ShiritoriController {
                 .content(requestBody)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andReturn();
+	}
+	
+	@Test
+	void POST_judge_UnprocessableEntityExceptionがスローされた場合_HTTPステータス400を返すこと() throws Exception {
+		
+		doThrow(new UnprocessableEntityException(null)).when(shiritoriService).judge(anyString(), any());
+		String requestBody = "{\"word\": \"みかん\"}";
+		
+        mvc.perform(MockMvcRequestBuilders.post("/v1/shiritori/judge/entryId/hogehoge")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity())
                 .andReturn();
 	}
 	
@@ -249,7 +264,7 @@ class ShiritoriControllerTest extends ShiritoriController {
 	}
 	
 	@Test
-	void GET_allGetWord_存在しないEntryIdが指定された場合_HTTPステータスコード400を返すこと() throws Exception {
+	void GET_allGetWord_BadRequestExceptionがスローされた場合_HTTPステータスコード400を返すこと() throws Exception {
 		
 		doThrow(new BadRequestException(null)).when(shiritoriService).allGetWord(anyString());
 		

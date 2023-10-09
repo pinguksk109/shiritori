@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import jp.co.ot.shiritori.domain.exception.BadRequestException;
 import jp.co.ot.shiritori.domain.exception.ConflictException;
+import jp.co.ot.shiritori.domain.exception.UnprocessableEntityException;
 import jp.co.ot.shiritori.domain.request.ShiritoriEntryRequest;
 import jp.co.ot.shiritori.domain.request.ShiritoriWordRequest;
 import jp.co.ot.shiritori.domain.request.ShiritoriWordRequestDto;
@@ -50,14 +51,19 @@ public class ShiritoriService {
 	 * @param request
 	 * @return
 	 * @throws BadRequestException 
+	 * @throws UnprocessableEntityException 
 	 */
-	public ShiritoriResultResponse judge(String entryId, ShiritoriWordRequest request) throws BadRequestException {
+	public ShiritoriResultResponse judge(String entryId, ShiritoriWordRequest request) throws BadRequestException, UnprocessableEntityException {
 		
 		// 存在しないentryIdだったら処理を進めない
 		EntryIdResponse entryIdResponse = shiritoriRepository.getEntryId(entryId);
 		
 		if(Objects.isNull(entryIdResponse)) {
 			throw new BadRequestException(entryId);
+		}
+		
+		if(request.getWord().endsWith("ん")) {
+			throw new UnprocessableEntityException(request.getWord(), "単語が「ん」で終わっています。");
 		}
 		
 		ShiritoriResultResponse response = shiritoriRepository.judge(entryId, new ShiritoriWordRequestDto(request));

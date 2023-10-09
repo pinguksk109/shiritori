@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import jp.co.ot.shiritori.domain.exception.BadRequestException;
 import jp.co.ot.shiritori.domain.exception.ConflictException;
+import jp.co.ot.shiritori.domain.exception.UnprocessableEntityException;
 import jp.co.ot.shiritori.domain.request.ShiritoriEntryRequest;
 import jp.co.ot.shiritori.domain.request.ShiritoriWordRequest;
 import jp.co.ot.shiritori.domain.response.EntryIdResponse;
@@ -76,7 +77,7 @@ class ShiritoriServiceTest extends ShiritoriService {
 	}
 	
 	@Test
-	void judge_データを保存できること() throws BadRequestException {
+	void judge_データを保存できること() throws BadRequestException, UnprocessableEntityException {
 		
 		ShiritoriWordRequest request = new ShiritoriWordRequest();
 		request.setWord("りんご");
@@ -110,7 +111,7 @@ class ShiritoriServiceTest extends ShiritoriService {
 	}
 	
 	@Test
-	void judge_既にしりとりで出ているキーワードの場合_そのキーワードを返すこと() throws BadRequestException {
+	void judge_既にしりとりで出ているキーワードの場合_そのキーワードを返すこと() throws BadRequestException, UnprocessableEntityException {
 		
 		ShiritoriWordRequest request = new ShiritoriWordRequest();
 		request.setWord("りんご");
@@ -127,6 +128,23 @@ class ShiritoriServiceTest extends ShiritoriService {
 		
 		assertEquals("りんご", actual.getWord());
 		verify(shiritoriRepository, times(0)).saveWord(anyString(), any());
+		
+	}
+	
+	@Test
+	void judge_んで終わる単語の場合_UnprocessableEntityExceptionをスローすること() {
+		
+		ShiritoriWordRequest request = new ShiritoriWordRequest();
+		request.setWord("みかん");
+		
+		EntryIdResponse idResponse = new EntryIdResponse();
+		idResponse.setEntryId("hogehoge");
+		
+		doReturn(idResponse).when(shiritoriRepository).getEntryId(anyString());
+		
+		assertThrows(UnprocessableEntityException.class, () -> {
+			sut.judge("hogehoge", request);
+		});
 		
 	}
 	
@@ -210,7 +228,6 @@ class ShiritoriServiceTest extends ShiritoriService {
 		
 		doReturn(idResponse).when(shiritoriRepository).getEntryId(anyString());
 		doReturn(word).when(shiritoriRepository).allGetKeyword(anyString());
-
 		
 		ShiritoriAllKeywordResultResponseDto actual = sut.allGetWord("testhoge30");
 		

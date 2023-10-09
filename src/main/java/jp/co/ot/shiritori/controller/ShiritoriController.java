@@ -18,6 +18,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jp.co.ot.shiritori.domain.exception.BadRequestException;
 import jp.co.ot.shiritori.domain.exception.ConflictException;
+import jp.co.ot.shiritori.domain.exception.UnprocessableEntityException;
 import jp.co.ot.shiritori.domain.request.ShiritoriEntryRequest;
 import jp.co.ot.shiritori.domain.request.ShiritoriWordRequest;
 import jp.co.ot.shiritori.domain.response.ShiritoriResultResponse;
@@ -56,9 +57,10 @@ public class ShiritoriController {
 	 * @param bindingResult
 	 * @return
 	 * @throws BadRequestException
+	 * @throws UnprocessableEntityException 
 	 */
 	@PostMapping("judge/entryId/{entryId}")
-	public ResponseEntity<?> judge(@PathVariable("entryId") @NotBlank String entryId, @RequestBody @Valid ShiritoriWordRequest request, BindingResult bindingResult) throws BadRequestException {
+	public ResponseEntity<?> judge(@PathVariable("entryId") @NotBlank String entryId, @RequestBody @Valid ShiritoriWordRequest request, BindingResult bindingResult) throws BadRequestException, UnprocessableEntityException {
 	
 		if(bindingResult.hasErrors() || isKatakana(request.getWord())) {
 			throw new BadRequestException("ワードに不正がありました");
